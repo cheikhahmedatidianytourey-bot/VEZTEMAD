@@ -56,8 +56,15 @@
         <div id="signed-in" hidden><p id="welcome-message"></p><button type="button" id="logout-button" class="button secondary">Se déconnecter</button></div>
       </section>
       <div class="workspace-content">
-        <form id="project-form" class="project-form" hidden><label for="project-name">Nom du projet</label><input id="project-name" name="name" maxlength="80" placeholder="Ex. Mon application" required><label for="project-description">Que souhaitez-vous construire ?</label><textarea id="project-description" name="description" maxlength="2000" rows="4" placeholder="Décrivez votre idée en quelques phrases…"></textarea><button class="button primary" type="submit">Créer mon espace <span>↗</span></button><p id="form-message" class="form-message" role="status"></p></form>
-        <div class="projects-panel"><div class="projects-title"><h3>Vos projets</h3><span id="project-count">0 projet</span></div><div id="project-list" class="project-list"><p class="empty-state">Connectez-vous pour afficher vos projets.</p></div></div>
+        <div class="workspace-column">
+          <form id="project-form" class="project-form" hidden><h3>Nouveau projet</h3><label for="project-name">Nom du projet</label><input id="project-name" name="name" maxlength="80" placeholder="Ex. Mon application" required><label for="project-description">Que souhaitez-vous construire ?</label><textarea id="project-description" name="description" maxlength="2000" rows="4" placeholder="Décrivez votre idée en quelques phrases…"></textarea><button class="button primary" type="submit">Créer mon espace <span>↗</span></button><p id="form-message" class="form-message" role="status"></p></form>
+          <div class="projects-panel"><div class="projects-title"><h3>Vos projets</h3><span id="project-count">0 projet</span></div><div id="project-list" class="project-list"><p class="empty-state">Connectez-vous pour afficher vos projets.</p></div></div>
+        </div>
+        <div class="ai-panel" id="ai-panel" hidden>
+          <div class="eyebrow">ASSISTANT DE CONCEPTION</div><h3>Transformez votre idée en plan technique.</h3>
+          <form id="ai-form" class="project-form"><label for="ai-prompt">Décrivez l'application que vous souhaitez créer</label><textarea id="ai-prompt" rows="6" maxlength="12000" minlength="20" placeholder="Ex. Une application mobile de réservation de rendez-vous avec comptes utilisateurs, calendrier, notifications et tableau de bord…" required></textarea><button class="button primary" id="ai-submit" type="submit">Générer le plan avec l'IA <span>✳</span></button><p id="ai-message" class="form-message" role="status"></p></form>
+          <pre id="ai-result" class="ai-result" hidden></pre>
+        </div>
       </div>
     </section>
   </main>
