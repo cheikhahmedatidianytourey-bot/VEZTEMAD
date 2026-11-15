@@ -41,9 +41,24 @@
     </section>
     <section class="workflow-section" id="workflow"><div class="eyebrow">UN PARCOURS CLAIR</div><h2>Une idée. Des étapes.<br><span class="gradient-text">Un produit.</span></h2><div class="steps"><div><b>01</b><h3>Décrire</h3><p>Formalisez votre besoin et vos objectifs.</p></div><div><b>02</b><h3>Construire</h3><p>Générez et organisez les composants du projet.</p></div><div><b>03</b><h3>Vérifier</h3><p>Testez, corrigez et sécurisez.</p></div><div><b>04</b><h3>Livrer</h3><p>Déployez et préparez la publication.</p></div></div></section>
     <section class="workspace section" id="workspace">
-      <div class="section-heading"><div><div class="eyebrow">VOTRE PREMIER ESPACE</div><h2>Donnez forme<br>à votre projet.</h2></div><p>Créez un espace de travail. Cette première version enregistre les projets en mémoire serveur ; une base de données persistante sera ajoutée avant la production.</p></div>
-      <form id="project-form" class="project-form"><label for="project-name">Nom du projet</label><input id="project-name" name="name" maxlength="80" placeholder="Ex. Mon application" required><label for="project-description">Que souhaitez-vous construire ?</label><textarea id="project-description" name="description" maxlength="1000" rows="4" placeholder="Décrivez votre idée en quelques phrases…"></textarea><button class="button primary" type="submit">Créer mon espace <span>↗</span></button><p id="form-message" class="form-message" role="status"></p></form>
-      <div class="projects-panel"><div class="projects-title"><h3>Vos projets</h3><span id="project-count">0 projet</span></div><div id="project-list" class="project-list"><p class="empty-state">Vos projets apparaîtront ici.</p></div></div>
+      <div class="section-heading"><div><div class="eyebrow">VOTRE ESPACE SÉCURISÉ</div><h2>Construisez<br>votre avenir.</h2></div><p>Créez votre compte ou connectez-vous. Vos projets seront enregistrés dans votre espace personnel dès que la base PostgreSQL sera configurée.</p></div>
+      <section class="auth-panel" id="auth-panel" aria-labelledby="auth-title">
+        <div class="projects-title"><h3 id="auth-title">Votre compte VEZTEMAD</h3><span id="auth-state">Non connecté</span></div>
+        <div id="auth-forms">
+          <div class="auth-tabs"><button type="button" class="auth-tab active" data-mode="register">Créer un compte</button><button type="button" class="auth-tab" data-mode="login">Connexion</button></div>
+          <form id="auth-form" class="project-form">
+            <div id="auth-name-wrap"><label for="auth-name">Nom complet</label><input id="auth-name" name="name" autocomplete="name" minlength="2" maxlength="80" placeholder="Votre nom" required></div>
+            <label for="auth-email">Adresse e-mail</label><input id="auth-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="vous@exemple.com" required>
+            <label for="auth-password">Mot de passe (12 caractères minimum)</label><input id="auth-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+            <button class="button primary" id="auth-submit" type="submit">Créer mon compte <span>↗</span></button><p id="auth-message" class="form-message" role="status"></p>
+          </form>
+        </div>
+        <div id="signed-in" hidden><p id="welcome-message"></p><button type="button" id="logout-button" class="button secondary">Se déconnecter</button></div>
+      </section>
+      <div class="workspace-content">
+        <form id="project-form" class="project-form" hidden><label for="project-name">Nom du projet</label><input id="project-name" name="name" maxlength="80" placeholder="Ex. Mon application" required><label for="project-description">Que souhaitez-vous construire ?</label><textarea id="project-description" name="description" maxlength="2000" rows="4" placeholder="Décrivez votre idée en quelques phrases…"></textarea><button class="button primary" type="submit">Créer mon espace <span>↗</span></button><p id="form-message" class="form-message" role="status"></p></form>
+        <div class="projects-panel"><div class="projects-title"><h3>Vos projets</h3><span id="project-count">0 projet</span></div><div id="project-list" class="project-list"><p class="empty-state">Connectez-vous pour afficher vos projets.</p></div></div>
+      </div>
     </section>
   </main>
   <footer><a class="brand" href="/"><span class="brand-mark">V</span><span>VEZTE<span class="brand-light">MAD</span></span></a><p>Une initiative de WEMAD · Technology for a better tomorrow.</p><span>© <span id="year"></span> WEMAD</span></footer>
