@@ -5,6 +5,7 @@ const authMessage = $("#auth-message");
 const projectForm = $("#project-form");
 const projectMessage = $("#form-message");
 const projectList = $("#project-list");
+const aiForm = $("#ai-form");
 const countNode = $("#project-count");
 let authMode = "register";
 let currentUser = null;
@@ -54,6 +55,7 @@ function showUser(user) {
   $("#signed-in").hidden = !user;
   $("#auth-state").textContent = user ? "Connecté" : "Non connecté";
   projectForm.hidden = !user;
+  $("#ai-panel").hidden = !user;
   if (user) {
     $("#welcome-message").textContent = "Bienvenue, " + user.name + ". Votre espace personnel est prêt.";
     loadProjects().catch(error => { projectMessage.textContent = error.message; });
@@ -117,3 +119,22 @@ projectForm.addEventListener("submit", async event => {
   }
 });
 initialize();
+
+aiForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const button = $("#ai-submit");
+  const output = $("#ai-result");
+  button.disabled = true;
+  $("#ai-message").textContent = "Analyse de votre idée en cours…";
+  output.hidden = true;
+  try {
+    const data = await request("/api/ai/generate", { method: "POST", body: JSON.stringify({ prompt: $("#ai-prompt").value }) });
+    output.textContent = JSON.stringify(data.plan, null, 2);
+    output.hidden = false;
+    $("#ai-message").textContent = "Plan de conception généré. Il s'agit d'une spécification, pas encore du code de l'application.";
+  } catch (error) {
+    $("#ai-message").textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
