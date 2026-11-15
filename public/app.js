@@ -129,9 +129,9 @@ aiForm.addEventListener("submit", async event => {
   output.hidden = true;
   try {
     const data = await request("/api/ai/generate", { method: "POST", body: JSON.stringify({ prompt: $("#ai-prompt").value }) });
-    output.textContent = JSON.stringify(data.plan, null, 2);
+    output.textContent = JSON.stringify(data.blueprint, null, 2);
     output.hidden = false;
-    $("#ai-message").textContent = "Plan de conception généré. Il s'agit d'une spécification, pas encore du code de l'application.";
+    $("#ai-message").textContent = "Blueprint VEZTEMAD généré et contrôlé. Il s'agit d'une spécification structurée, pas encore du code de l'application.";
   } catch (error) {
     $("#ai-message").textContent = error.message;
   } finally {
