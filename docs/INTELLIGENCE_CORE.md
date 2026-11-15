@@ -10,7 +10,8 @@ The current code introduces a two-pass AI workflow:
 1. **Requirements analyst** turns the user's idea into a structured product specification.
 2. **Adversarial architect** critiques and improves the draft for contradictions, security gaps and missing acceptance criteria.
 3. **Blueprint compiler** converts the reviewed result into a canonical, versioned structure with features, screens, data entities, ordered implementation tasks, risks and quality warnings.
-4. **Persistence** stores the resulting blueprint in the user's AI generation history.
+4. **Deterministic quality gate** scores specification completeness and reports blockers and warnings before the blueprint is stored. This is a planning-readiness check, not proof of working software.
+5. **Persistence** stores the resulting blueprint in the user's AI generation history.
 
 The compiler is deterministic code owned by VEZTEMAD; the language model remains a configurable external provider. This is an initial kernel, not a claim that VEZTEMAD has trained its own foundation model.
 
@@ -37,4 +38,4 @@ Generated output is untrusted. Never execute it in the web server process. Futur
 
 ## Honest capability boundary
 
-The current Intelligence Core generates and reviews structured specifications. It does not yet generate a complete application, run code, repair builds or deploy projects. The external model provider still performs language reasoning. The proprietary compiler and workflow are a foundation for a future defensible product, not proof of an uncopyable AI.
+The current Intelligence Core generates and reviews structured specifications and applies deterministic completeness gates. It does not yet generate a complete application, run code, repair builds or deploy projects. The external model provider still performs language reasoning. The proprietary compiler and workflow are a foundation for a future defensible product, not proof of an uncopyable AI.
