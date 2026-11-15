@@ -15,6 +15,7 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: "draft-7", legacyHeaders: false });
+const aiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: "draft-7", legacyHeaders: false, message: { error: "Limite temporaire de génération atteinte. Réessayez plus tard." } });
 const safeText = (value, max = 120) => typeof value === "string" ? value.trim().slice(0, max) : "";
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -108,7 +109,7 @@ app.post("/api/projects", security.requireAuth, async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-app.post("/api/ai/generate", security.requireAuth, async (req, res, next) => {
+app.post("/api/ai/generate", aiLimiter, security.requireAuth, async (req, res, next) => {
   try {
     const prompt = safeText(req.body && req.body.prompt, 12000);
     const projectId = safeText(req.body && req.body.projectId, 64);
