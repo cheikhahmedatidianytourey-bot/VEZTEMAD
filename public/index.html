@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d18">
+  <meta name="description" content="VEZTEMAD — plateforme de création et de livraison d'applications assistée par l'intelligence artificielle.">
+  <title>VEZTEMAD — Build what comes next</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="VEZTEMAD accueil"><span class="brand-mark">V</span><span>VEZTE<span class="brand-light">MAD</span></span></a>
+    <nav><a href="#platform">Plateforme</a><a href="#workflow">Fonctionnement</a><a href="#workspace">Espace de travail</a></nav>
+    <a class="top-cta" href="#workspace">Commencer <span>↗</span></a>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse"></span> L'atelier logiciel nouvelle génération</div>
+      <h1>De l'idée à<br><span class="gradient-text">l'application.</span></h1>
+      <p class="hero-copy">Imaginez. Construisez. Testez. Déployez. VEZTEMAD rassemble les outils essentiels pour transformer une idée en produit numérique.</p>
+      <div class="hero-actions"><a class="button primary" href="#workspace">Créer un projet <span>↗</span></a><a class="text-link" href="#platform">Découvrir la plateforme <span>↓</span></a></div>
+      <div class="hero-note"><span class="status-dot"></span><span id="service-status">Vérification du service…</span></div>
+      <div class="hero-orbit" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="core"><span>V</span><small>CREATE</small></div><i class="orbit-node node-a">AI</i><i class="orbit-node node-b">⌘</i><i class="orbit-node node-c">↗</i></div>
+    </section>
+    <section class="section" id="platform">
+      <div class="section-heading"><div><div class="eyebrow">UN ENVIRONNEMENT UNIFIÉ</div><h2>Tout commence par<br>une vision.</h2></div><p>Une base évolutive conçue pour réunir création assistée par IA, développement, qualité et mise en production.</p></div>
+      <div class="feature-grid">
+        <article class="feature-card"><div class="feature-icon">✳</div><h3>Création assistée par IA</h3><p>Décrivez votre idée et préparez le terrain pour la génération de code et de composants.</p><span class="feature-state">Connecteur IA à configurer</span></article>
+        <article class="feature-card"><div class="feature-icon">⌘</div><h3>GitHub intégré</h3><p>Organisez le code, les versions et les collaborations dans vos dépôts.</p><span class="feature-state">Intégration à configurer</span></article>
+        <article class="feature-card"><div class="feature-icon">◈</div><h3>Tests & qualité</h3><p>Structurez les vérifications avant chaque livraison et réduisez les régressions.</p><span class="feature-state">Socle initial disponible</span></article>
+        <article class="feature-card"><div class="feature-icon">↗</div><h3>Déploiement</h3><p>Préparez la publication web et les environnements de production.</p><span class="feature-state">Connecteur à configurer</span></article>
+        <article class="feature-card"><div class="feature-icon">▣</div><h3>Applications Android</h3><p>Objectif produit : builds APK/AAB et préparation des fiches Google Play.</p><span class="feature-state">Sur la feuille de route</span></article>
+        <article class="feature-card"><div class="feature-icon">◎</div><h3>Agents spécialisés</h3><p>Une architecture prévue pour coordonner des agents logiciels avec supervision et permissions.</p><span class="feature-state">Architecture à développer</span></article>
+      </div>
+    </section>
+    <section class="workflow-section" id="workflow"><div class="eyebrow">UN PARCOURS CLAIR</div><h2>Une idée. Des étapes.<br><span class="gradient-text">Un produit.</span></h2><div class="steps"><div><b>01</b><h3>Décrire</h3><p>Formalisez votre besoin et vos objectifs.</p></div><div><b>02</b><h3>Construire</h3><p>Générez et organisez les composants du projet.</p></div><div><b>03</b><h3>Vérifier</h3><p>Testez, corrigez et sécurisez.</p></div><div><b>04</b><h3>Livrer</h3><p>Déployez et préparez la publication.</p></div></div></section>
+    <section class="workspace section" id="workspace">
+      <div class="section-heading"><div><div class="eyebrow">VOTRE PREMIER ESPACE</div><h2>Donnez forme<br>à votre projet.</h2></div><p>Créez un espace de travail. Cette première version enregistre les projets en mémoire serveur ; une base de données persistante sera ajoutée avant la production.</p></div>
+      <form id="project-form" class="project-form"><label for="project-name">Nom du projet</label><input id="project-name" name="name" maxlength="80" placeholder="Ex. Mon application" required><label for="project-description">Que souhaitez-vous construire ?</label><textarea id="project-description" name="description" maxlength="1000" rows="4" placeholder="Décrivez votre idée en quelques phrases…"></textarea><button class="button primary" type="submit">Créer mon espace <span>↗</span></button><p id="form-message" class="form-message" role="status"></p></form>
+      <div class="projects-panel"><div class="projects-title"><h3>Vos projets</h3><span id="project-count">0 projet</span></div><div id="project-list" class="project-list"><p class="empty-state">Vos projets apparaîtront ici.</p></div></div>
+    </section>
+  </main>
+  <footer><a class="brand" href="/"><span class="brand-mark">V</span><span>VEZTE<span class="brand-light">MAD</span></span></a><p>Une initiative de WEMAD · Technology for a better tomorrow.</p><span>© <span id="year"></span> WEMAD</span></footer>
+</body>
+</html>
