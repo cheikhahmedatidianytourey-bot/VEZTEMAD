@@ -10,7 +10,7 @@ This roadmap distinguishes the long-term product vision from capabilities that e
 - [x] Database initialization and migration command.
 - [x] Account registration and login with bcrypt password hashing.
 - [x] Signed HttpOnly session cookies and authenticated project ownership.
-- [x] Structured AI product-planning endpoint using an OpenAI-compatible API.
+- [x] Structured AI product-planning endpoint using an OpenAI-compatible API.\n- [x] First Intelligence Core: two-pass analyst and adversarial architect workflow.\n- [x] Deterministic blueprint compiler with task dependencies, quality warnings and risk register.
 - [x] Basic API tests and GitHub Actions CI.
 - [ ] Production security review, email verification, password reset, MFA and CSRF hardening.
 - [ ] Managed PostgreSQL instance, backups and production deployment verification.
