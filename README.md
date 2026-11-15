@@ -1,63 +1,69 @@
 # VEZTEMAD
 
-**VEZTEMAD** is WEMAD's planned AI-assisted platform for turning product ideas into software projects, with a roadmap covering code generation, GitHub workflows, quality checks, web deployment, Android APK/AAB builds and Google Play release preparation.
+**VEZTEMAD** is WEMAD's application creation platform: an evolving workspace for turning product ideas into software through AI-assisted planning, engineering workflows and delivery tools.
 
-> Technology for a better tomorrow.
+> **Technology for a better tomorrow.**
 
-## Current status
+Founded by **Cheikh Ahmed Tidiane Touré**.
 
-This repository contains the initial web application foundation:
-- Responsive French-language landing page and project workspace.
-- Express API with health/configuration endpoints.
-- In-memory project creation and listing for early UI validation.
-- Basic HTTP security headers, request-size limit, compression and API rate limiting.
-- Render Blueprint configuration.
+## Implemented foundation (0.2.0)
 
-The AI, GitHub, deployment and Android build capabilities are **roadmap items**, not yet active integrations. The current project store is in memory and resets when the server restarts. Do not use this build for production customer data.
+- Responsive French-language product interface.
+- Express API with security headers, compression, request limits and rate limiting.
+- PostgreSQL schema for users, private projects and AI generation history.
+- Account registration and login with bcrypt password hashing.
+- Signed seven-day session in an HttpOnly, SameSite=Lax cookie.
+- Project endpoints protected by authentication and scoped to the signed-in user.
+- OpenAI-compatible application-planning endpoint; it produces a structured product plan, not a complete generated application.
+- Startup database schema initialization and a manual migration command.
+- Basic automated API tests and GitHub Actions validation.
 
-## Requirements
+## Required environment configuration
 
-- Node.js 20 or newer
-- npm
+Set secrets in Render's Environment page. Never commit secrets or paste them into source files.
 
-## Run locally
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `JWT_SECRET` | Yes | Random secret, at least 32 characters |
+| `AI_API_KEY` | For AI | Provider API key |
+| `AI_API_URL` | No | OpenAI-compatible chat completions URL |
+| `AI_MODEL` | No | Model name; defaults to `gpt-4o-mini` |
+| `ALLOWED_ORIGIN` | If cross-origin | Comma-separated trusted frontend origins |
 
-```bash
-npm install
-cp .env.example .env
-npm run dev
-```
+Generate a strong session secret locally with `openssl rand -base64 48`. Store the result only in Render's secret environment settings.
 
-Open http://localhost:3000.
+## Local development
+
+1. Install Node.js 20 or newer and PostgreSQL.
+2. Run `npm install`.
+3. Copy `.env.example` to `.env` and configure `DATABASE_URL` and `JWT_SECRET`.
+4. Run `npm run db:migrate` (the server also ensures the schema exists at startup).
+5. Run `npm run dev` and open `http://localhost:3000`.
 
 ## API
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| GET | `/api/health` | Health check |
-| GET | `/api/config` | Public capability flags |
-| GET | `/api/projects` | List in-memory projects |
-| POST | `/api/projects` | Create a project |
-| POST | `/api/ai/generate` | Reserved AI generation endpoint (503 until configured) |
+| Method | Endpoint | Authentication | Purpose |
+| --- | --- | --- | --- |
+| GET | `/api/health` | No | Service and dependency health |
+| GET | `/api/config` | No | Public capability flags |
+| POST | `/api/auth/register` | No | Create an account |
+| POST | `/api/auth/login` | No | Start a session |
+| POST | `/api/auth/logout` | No | End a session |
+| GET | `/api/auth/me` | Yes | Current account |
+| GET | `/api/projects` | Yes | List the current user's projects |
+| POST | `/api/projects` | Yes | Create a private project |
+| POST | `/api/ai/generate` | Yes | Generate a structured application plan |
+
+## Current limitations — not production launch ready
+
+The AI endpoint generates a structured product plan only; it does not yet generate, execute, test or deploy complete source-code projects. GitHub repository creation and commits, Render deployments, background job orchestration, Android APK/AAB builds, Google Play publishing, billing/subscriptions, email verification, password reset, MFA, audit logs and a full admin console remain to be implemented and tested. The repository must not be presented as having those capabilities yet.
+
+Before onboarding paying customers, complete security review, database backups, migrations strategy, email verification and recovery, CSRF/origin protections, abuse controls, integration permission scopes, observability, billing webhooks and end-to-end tests.
 
 ## Deployment on Render
 
-1. Create a new Blueprint or Web Service from this repository.
-2. Render detects `render.yaml`.
-3. Add secrets only in Render's environment settings.
-4. Deploy and verify `/api/health`.
-
-## Security
-
-Never commit API keys, OAuth secrets, access tokens, passwords or signing keys. The frontend must never receive private provider credentials. Before public launch, add persistent storage, authentication, authorization, audit logs, billing safeguards, background jobs, integration-specific permission scopes, automated tests and operational monitoring.
-
-## Product direction
-
-See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-## Founder
-
-Founded by Cheikh Ahmed Tidiane Touré.
+Connect this repository as a Render Blueprint, create a managed PostgreSQL database, set `DATABASE_URL` and a strong `JWT_SECRET`, then deploy. Configure the AI key only when ready to enable AI planning. Verify `/api/health` after deployment.
 
 ## License
 
