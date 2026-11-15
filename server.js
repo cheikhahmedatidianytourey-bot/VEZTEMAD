@@ -9,7 +9,7 @@ const path = require("path");
 const crypto = require("crypto");
 const db = require("./lib/database");
 const security = require("./lib/security");
-const { generateApplicationPlan } = require("./lib/ai");
+const { createIntelligenceBlueprint } = require("./lib/intelligence/orchestrator");
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -118,8 +118,8 @@ app.post("/api/ai/generate", aiLimiter, security.requireAuth, async (req, res, n
       const owned = await db.query("SELECT id FROM projects WHERE id=$1 AND user_id=$2", [projectId,req.user.id]);
       if (!owned.rows[0]) return res.status(404).json({ error: "Projet introuvable." });
     }
-    const plan = await generateApplicationPlan({ userId: req.user.id, projectId: projectId || null, prompt });
-    res.json({ plan });
+    const blueprint = await createIntelligenceBlueprint({ userId: req.user.id, projectId: projectId || null, prompt });
+    res.json({ blueprint });
   } catch (error) { next(error); }
 });
 
