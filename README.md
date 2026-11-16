@@ -12,10 +12,11 @@ Founded by **Cheikh Ahmed Tidiane Touré**.
 - Express API with security headers, compression, request limits and rate limiting.
 - PostgreSQL schema for users, private projects and AI generation history.
 - Account registration and login with bcrypt password hashing.
-- Signed seven-day session in an HttpOnly, SameSite=Lax cookie.
+- Signed seven-day HttpOnly, SameSite=Lax session cookie backed by revocable PostgreSQL session records; only a hash of the session identifier is stored.
 - Project endpoints protected by authentication and scoped to the signed-in user.
 - OpenAI-compatible application-planning endpoint; it produces a structured product plan, not a complete generated application.
 - Startup database schema initialization and a manual migration command.
+- Same-origin validation for state-changing API requests, plus automated tests for rejected cross-origin and origin-less requests.
 - Basic automated API tests and GitHub Actions validation.
 
 ## Required environment configuration
@@ -59,7 +60,7 @@ Generate a strong session secret locally with `openssl rand -base64 48`. Store t
 
 The AI endpoint generates a structured product plan only; it does not yet generate, execute, test or deploy complete source-code projects. GitHub repository creation and commits, Render deployments, background job orchestration, Android APK/AAB builds, Google Play publishing, billing/subscriptions, email verification, password reset, MFA, audit logs and a full admin console remain to be implemented and tested. The repository must not be presented as having those capabilities yet.
 
-Before onboarding paying customers, complete security review, database backups, migrations strategy, email verification and recovery, CSRF/origin protections, abuse controls, integration permission scopes, observability, billing webhooks and end-to-end tests.
+Before onboarding paying customers, complete security review, database backups, migrations strategy, email verification and recovery, automated session cleanup, MFA and account recovery, abuse controls, integration permission scopes, observability, billing webhooks and end-to-end tests.
 
 ## Deployment on Render
 
