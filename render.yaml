@@ -20,9 +20,5 @@ services:
         value: https://api.openai.com/v1/chat/completions
       - key: AI_MODEL
         value: gpt-4o-mini
-      - key: GITHUB_TOKEN
-        sync: false
-      - key: RENDER_API_KEY
-        sync: false
       - key: ALLOWED_ORIGIN
         sync: false
