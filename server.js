@@ -20,11 +20,13 @@ const safeText = (value, max = 120) => typeof value === "string" ? value.trim().
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 app.disable("x-powered-by");
+if (NODE_ENV === "production") app.set("trust proxy", 1);
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN ? process.env.ALLOWED_ORIGIN.split(",").map(v => v.trim()) : false, credentials: true }));
 app.use(compression());
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
+app.use("/api", security.requireSameOrigin);
 app.use("/api", rateLimit({ windowMs: 60_000, limit: 100, standardHeaders: "draft-7", legacyHeaders: false }));
 
 app.get("/api/health", async (_req, res) => {
@@ -59,7 +61,8 @@ app.post("/api/auth/register", authLimiter, async (req, res, next) => {
     const passwordHash = await security.hashPassword(password);
     const result = await db.query("INSERT INTO users (id,name,email,password_hash) VALUES ($1,$2,$3,$4) RETURNING id,name,email,created_at", [id,name,email,passwordHash]);
     const user = result.rows[0];
-    res.cookie(security.COOKIE_NAME, security.issueToken(user), security.sessionCookieOptions());
+    const token = await security.createSession(user);
+    res.cookie(security.COOKIE_NAME, token, security.sessionCookieOptions());
     return res.status(201).json({ user });
   } catch (error) {
     if (error.code === "23505") return res.status(409).json({ error: "Un compte existe déjà avec cette adresse e-mail." });
@@ -74,14 +77,18 @@ app.post("/api/auth/login", authLimiter, async (req, res, next) => {
     const result = await db.query("SELECT id,name,email,password_hash,created_at FROM users WHERE email=$1", [email]);
     const user = result.rows[0];
     if (!user || !(await security.verifyPassword(password, user.password_hash))) return res.status(401).json({ error: "Adresse e-mail ou mot de passe incorrect." });
-    res.cookie(security.COOKIE_NAME, security.issueToken(user), security.sessionCookieOptions());
+    const token = await security.createSession(user);
+    res.cookie(security.COOKIE_NAME, token, security.sessionCookieOptions());
     return res.json({ user: { id: user.id, name: user.name, email: user.email, created_at: user.created_at } });
   } catch (error) { return next(error); }
 });
 
-app.post("/api/auth/logout", (_req, res) => {
-  res.clearCookie(security.COOKIE_NAME, { path: "/", httpOnly: true, secure: NODE_ENV === "production", sameSite: "lax" });
-  res.status(200).json({ success: true });
+app.post("/api/auth/logout", security.requireAuth, async (req, res, next) => {
+  try {
+    await security.revokeSession(req.sessionJti);
+    security.clearSessionCookie(res);
+    return res.status(200).json({ success: true });
+  } catch (error) { return next(error); }
 });
 
 app.get("/api/auth/me", security.requireAuth, async (req, res, next) => {
@@ -106,7 +113,7 @@ app.post("/api/projects", security.requireAuth, async (req, res, next) => {
     if (name.length < 2) return res.status(400).json({ error: "Le nom du projet doit contenir au moins 2 caractères." });
     const result = await db.query("INSERT INTO projects (id,user_id,name,description) VALUES ($1,$2,$3,$4) RETURNING id,name,description,status,created_at AS \"createdAt\"", [crypto.randomUUID(),req.user.id,name,description]);
     res.status(201).json({ project: result.rows[0] });
-  } catch (error) { next(error); }
+  } catch (error) { res.status(500); next(error); }
 });
 
 app.post("/api/ai/generate", aiLimiter, security.requireAuth, async (req, res, next) => {
@@ -120,7 +127,7 @@ app.post("/api/ai/generate", aiLimiter, security.requireAuth, async (req, res, n
     }
     const blueprint = await createIntelligenceBlueprint({ userId: req.user.id, projectId: projectId || null, prompt });
     res.json({ blueprint });
-  } catch (error) { next(error); }
+  } catch (error) { return next(error); }
 });
 
 app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
