@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check lib/database.js && node --check lib/security.js && node --check lib/ai.js && node --check lib/intelligence/blueprint.js && node --check lib/intelligence/orchestrator.js && node --check lib/intelligence/quality-gates.js && node --check lib/titan/registry.js && node --check lib/titan/policy.js && node --check lib/titan/orchestrator.js && node --check lib/titan/index.js && node --check lib/titan/provider-adapter.js && node --check lib/titan/provider-runner.js",
+    "check": "node --check server.js && node --check public/app.js && node --check lib/database.js && node --check lib/security.js && node --check lib/ai.js && node --check lib/intelligence/blueprint.js && node --check lib/intelligence/orchestrator.js && node --check lib/intelligence/quality-gates.js && node --check lib/titan/registry.js && node --check lib/titan/policy.js && node --check lib/titan/orchestrator.js && node --check lib/titan/index.js && node --check lib/titan/provider-adapter.js && node --check lib/titan/provider-runner.js && node --check lib/titan/security-policy.js",
     "test": "node --test",
     "db:migrate": "node scripts/migrate.js"
   },
