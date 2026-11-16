@@ -37,7 +37,7 @@ test("sensitive actions require explicit approval and a reference", async () => 
   );
   await assert.rejects(
     core.authorize({ agent: getAgent("titan-auditor"), action: "delete_customer_data", permission: "read_workflow" }),
-    { code: "TITAN_PERMISSION_DENIED" }
+    { code: "TITAN_SENSITIVE_PERMISSION_REQUIRED" }
   );
 });
 
