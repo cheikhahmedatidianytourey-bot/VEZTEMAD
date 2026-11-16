@@ -33,8 +33,8 @@ class OpenAIProvider:
                 {
                     "role": "user",
                     "content": (
-                        f"Agent: {role}\\nMission: {objective}\\n"
-                        f"Project request and previous context:\\n{context}\\n"
+                        f"Agent: {role}\nMission: {objective}\n"
+                        f"Project request and previous context:\n{context}\n"
                         "Respond in the requested language. Be precise and label assumptions."
                     ),
                 },
