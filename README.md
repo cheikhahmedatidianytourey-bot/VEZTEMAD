@@ -16,7 +16,8 @@ Founded by **Cheikh Ahmed Tidiane Touré**.
 - Project endpoints protected by authentication and scoped to the signed-in user.
 - OpenAI-compatible application-planning endpoint; it produces a structured product plan, not a complete generated application.
 - Startup database schema initialization and a manual migration command.
-- Basic automated API tests and GitHub Actions validation.
+- TITAN specialist-role registry, sequential provider-backed reasoning workflow, centralized action policy and defensive security filter.
+- Automated unit/API tests and GitHub Actions validation.
 
 ## Required environment configuration
 
@@ -45,7 +46,7 @@ Generate a strong session secret locally with `openssl rand -base64 48`. Store t
 
 | Method | Endpoint | Authentication | Purpose |
 | --- | --- | --- | --- |
-| GET | `/api/health` | No | Service and dependency health |
+| GET | `/api/health` | No | Readiness check; returns HTTP 503 when PostgreSQL is unavailable |
 | GET | `/api/config` | No | Public capability flags |
 | POST | `/api/auth/register` | No | Create an account |
 | POST | `/api/auth/login` | No | Start a session |
@@ -57,13 +58,15 @@ Generate a strong session secret locally with `openssl rand -base64 48`. Store t
 
 ## Current limitations — not production launch ready
 
-The AI endpoint generates a structured product plan only; it does not yet generate, execute, test or deploy complete source-code projects. GitHub repository creation and commits, Render deployments, background job orchestration, Android APK/AAB builds, Google Play publishing, billing/subscriptions, email verification, password reset, MFA, audit logs and a full admin console remain to be implemented and tested. The repository must not be presented as having those capabilities yet.
+The AI endpoint generates a structured product plan only; it does not yet generate, execute, test or deploy complete source-code projects. The TITAN roles currently operate sequentially through one configured provider/model; they are not ten independent autonomous models. The security filter is a first defensive layer, not a guarantee of complete protection.
 
-Before onboarding paying customers, complete security review, database backups, migrations strategy, email verification and recovery, CSRF/origin protections, abuse controls, integration permission scopes, observability, billing webhooks and end-to-end tests.
+GitHub repository creation and commits, Render deployment orchestration, isolated code execution, background job orchestration, Android APK/AAB builds, Google Play publishing, billing/subscriptions, email verification, password reset, MFA, durable audit storage and a full admin console remain to be implemented and tested. The repository must not be presented as having those capabilities yet.
+
+Before onboarding paying customers, complete independent security review, database backups and restore tests, a versioned migration strategy, email verification and recovery, CSRF/origin protections, abuse controls, integration permission scopes, observability, billing webhooks and end-to-end tests.
 
 ## Deployment on Render
 
-Connect this repository as a Render Blueprint, create a managed PostgreSQL database, set `DATABASE_URL` and a strong `JWT_SECRET`, then deploy. Configure the AI key only when ready to enable AI planning. Verify `/api/health` after deployment.
+Connect this repository as a Render Blueprint, create a managed PostgreSQL database, set `DATABASE_URL` and a strong `JWT_SECRET`, then deploy. Configure the AI key only when ready to enable AI planning. The `/api/health` readiness check returns HTTP 503 until PostgreSQL is reachable; a green Render health check therefore requires a working database. Verify the endpoint after deployment.
 
 ## License
 
