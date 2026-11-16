@@ -1,30 +1,54 @@
 # VEZTEMAD TITAN — Engine foundation
 
-**Status:** foundation implemented; provider-backed autonomous agents are not yet connected.
+**Status:** provider-backed sequential reasoning workflow implemented; code execution and deployment are not implemented.
 
-TITAN is the planned specialist-orchestration layer inside VEZTEMAD. This first increment establishes a real, testable registry, a permission policy, and a sequential workflow contract.
+## Implemented
 
-## Implemented in this increment
-
-- Ten specialist role definitions: architect, coder, reasoner, security, tester, repair, optimizer, UI, mobile, and independent auditor.
-- Explicit permission lists for each role.
-- Sequential workflow execution through an injected executor.
-- An execution trace showing which stages completed.
+- Ten specialist role definitions with explicit permission lists.
+- Sequential workflow orchestration with a trace of completed stages.
+- OpenAI-compatible provider adapter configured through `AI_API_KEY`, optional `AI_API_URL`, and optional `AI_MODEL`.
+- Provider-backed runner with distinct French instructions for each specialist role.
+- `runTitanWithProvider()` entry point that connects the provider adapter, role runner, and workflow.
+- Bounded task/context/output sizes, HTTPS endpoint requirement, request timeout, bounded retries, and sanitized provider errors.
 - Human-approval gates for production deployment, publishing, purchases, releases, billing changes, and destructive customer-data actions.
-- Automated tests for role registration, workflow order, invalid input, permission denial, and approval requirements.
+- Automated unit and integration tests using mocked providers; no paid API request is needed to run the test suite.
 
-## Important distinction
+## How to configure
 
-The registry contains role definitions, not ten independent AI models. The workflow requires an executor supplied by a future provider integration. Until that adapter is implemented and configured, TITAN does not independently reason, write application code, run tests, or deploy software.
+Set these environment variables on the server (never in browser code or committed files):
+
+- `AI_API_KEY` — required provider credential.
+- `AI_API_URL` — optional HTTPS chat-completions endpoint; defaults to the OpenAI-compatible endpoint.
+- `AI_MODEL` — optional model name; defaults to `gpt-4o-mini`.
+
+Example usage from server-side code:
+
+```js
+const { runTitanWithProvider } = require("./lib/titan");
+
+const result = await runTitanWithProvider({
+  task: "Create a secure appointment booking application for clinics."
+});
+```
+
+The call makes real provider requests and may incur charges. Tests use mocked adapters and do not contact a provider.
+
+## Important limitations
+
+- The ten roles are prompts executed sequentially through one configured provider/model. They are not ten independent models or autonomous computers.
+- The workflow produces analysis and recommendations. It does not yet create files in a project workspace, execute generated code, run project tests, connect GitHub on behalf of a customer, or deploy applications.
+- A successful workflow status means the configured stages returned outputs; it does not certify that a proposed application works.
+- Provider configuration is server-operator controlled. Never allow an end user to choose an arbitrary provider URL.
+- Model output and previous-stage output are untrusted data. They must be validated before any future tool or file operation.
 
 ## Safety boundary
 
-Generated code must never execute inside the VEZTEMAD API process. A future build runner must use an isolated, resource-limited environment. External and production-impacting actions require explicit human approval and auditable evidence.
+Generated code must never execute inside the VEZTEMAD API process. A future build runner must use an isolated, resource-limited environment with controlled network access. External and production-impacting actions require explicit human approval and auditable evidence.
 
-## Next implementation increments
+## Next engineering increments
 
-1. Add a provider adapter with timeouts, schema validation, bounded retries, and provider/model configuration.
-2. Connect the specialist workflow to the existing AI provider without pretending role prompts are separate models.
-3. Add independent artifact validation and test evidence.
-4. Build isolated code-generation and execution workers.
-5. Add controlled GitHub and deployment integrations.
+1. Validate structured project-file manifests and safe paths.
+2. Persist generated project files in a controlled workspace.
+3. Build isolated code-generation and test workers.
+4. Add verified repair loops and test evidence.
+5. Add scoped GitHub export/PR integration and controlled deployment.
