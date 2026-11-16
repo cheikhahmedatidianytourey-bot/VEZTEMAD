@@ -11,8 +11,8 @@ class EngineOrchestrator:
 
     async def run(self, request: EngineRunRequest) -> EngineRunResponse:
         context = (
-            f"Language: {request.language}\\n"
-            f"Detail level: {request.detail_level}\\n"
+            f"Language: {request.language}\n"
+            f"Detail level: {request.detail_level}\n"
             f"User goal: {request.goal}"
         )
         stages: list[AgentStage] = []
@@ -30,7 +30,7 @@ class EngineOrchestrator:
                     output=output,
                 )
             )
-            context += f"\\n\\n{agent['name']} output:\\n{output}"
+            context += f"\n\n{agent['name']} output:\n{output}"
 
         return EngineRunResponse(
             status="completed",
