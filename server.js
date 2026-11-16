@@ -32,8 +32,9 @@ app.get("/api/health", async (_req, res) => {
   if (db.getPool()) {
     try { await db.query("SELECT 1"); databaseConnected = true; } catch (_error) {}
   }
-  res.status(200).json({
-    status: databaseConnected ? "ok" : "degraded",
+  const healthy = databaseConnected;
+  return res.status(healthy ? 200 : 503).json({
+    status: healthy ? "ok" : "degraded",
     service: "VEZTEMAD",
     version: require("./package.json").version,
     environment: NODE_ENV,
@@ -44,7 +45,7 @@ app.get("/api/health", async (_req, res) => {
 
 app.get("/api/config", (_req, res) => res.json({
   product: "VEZTEMAD", company: "WEMAD", tagline: "Technology for a better tomorrow.",
-  capabilities: { accounts: true, persistentProjects: Boolean(process.env.DATABASE_URL), aiGeneration: Boolean(process.env.AI_API_KEY), githubIntegration: Boolean(process.env.GITHUB_TOKEN), deployment: Boolean(process.env.RENDER_API_KEY), androidBuilds: false, payments: false }
+  capabilities: { accounts: true, persistentProjects: Boolean(process.env.DATABASE_URL), aiGeneration: Boolean(process.env.AI_API_KEY), githubIntegration: false, deployment: false, androidBuilds: false, payments: false }
 }));
 
 app.post("/api/auth/register", authLimiter, async (req, res, next) => {
@@ -120,7 +121,7 @@ app.post("/api/ai/generate", aiLimiter, security.requireAuth, async (req, res, n
     }
     const blueprint = await createIntelligenceBlueprint({ userId: req.user.id, projectId: projectId || null, prompt });
     res.json({ blueprint });
-  } catch (error) { next(error); }
+  } catch (error) { return next(error); }
 });
 
 app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
