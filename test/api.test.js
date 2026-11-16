@@ -1,15 +1,27 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+delete process.env.DATABASE_URL;
 const app = require("../server");
 const server = app.listen(0);
 const base = "http://127.0.0.1:" + server.address().port;
 
-test("health endpoint reports service identity", async () => {
+test("health endpoint reports degraded readiness when PostgreSQL is unavailable", async () => {
   const response = await fetch(base + "/api/health");
   const body = await response.json();
-  assert.equal(response.status, 200);
+  assert.equal(response.status, 503);
   assert.equal(body.service, "VEZTEMAD");
-  assert.ok(["ok", "degraded"].includes(body.status));
+  assert.equal(body.status, "degraded");
+  assert.equal(body.dependencies.database, false);
+});
+
+test("public capability flags never advertise unimplemented integrations", async () => {
+  const response = await fetch(base + "/api/config");
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.capabilities.githubIntegration, false);
+  assert.equal(body.capabilities.deployment, false);
+  assert.equal(body.capabilities.androidBuilds, false);
+  assert.equal(body.capabilities.payments, false);
 });
 
 test("private project endpoint rejects anonymous requests", async () => {
