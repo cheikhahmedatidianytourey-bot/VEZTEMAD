@@ -20,7 +20,7 @@ const safeText = (value, max = 120) => typeof value === "string" ? value.trim().
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 app.disable("x-powered-by");
-app.set("trust proxy", 1);
+if (NODE_ENV === "production") app.set("trust proxy", 1);
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN ? process.env.ALLOWED_ORIGIN.split(",").map(v => v.trim()) : false, credentials: true }));
 app.use(compression());
