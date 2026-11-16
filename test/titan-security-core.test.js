@@ -43,9 +43,9 @@ test("sensitive actions require explicit approval and a reference", async () => 
 
 test("active security tests require an explicit authorized scope", async () => {
   const core = createSecurityCore();
-  const security = getAgent("titan-security");
+  const security = { ...getAgent("titan-security"), permissions: [...getAgent("titan-security").permissions, "run_active_security_test"] };
   await assert.rejects(
-    core.authorize({ agent: security, action: "run_active_security_test", permission: "read_plan" }),
+    core.authorize({ agent: security, action: "run_active_security_test", permission: "run_active_security_test" }),
     { code: "TITAN_SECURITY_SCOPE_REQUIRED" }
   );
 });
