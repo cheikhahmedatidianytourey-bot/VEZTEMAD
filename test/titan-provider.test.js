@@ -45,8 +45,10 @@ test("adapter supports keyless self-hosted inference only when explicitly config
 });
 
 test("adapter allows private-network HTTP only with explicit opt-in", async () => {
-  const denied = createProviderAdapter({ apiKey: "secret", endpoint: "http://inference.internal/v1/chat/completions" });
-  await assert.rejects(denied.complete({ messages }), { code: "AI_INVALID_ENDPOINT" });
+  assert.throws(
+    () => createProviderAdapter({ apiKey: "secret", endpoint: "http://inference.internal/v1/chat/completions" }),
+    { code: "AI_INVALID_ENDPOINT" }
+  );
   let called = false;
   const allowed = createProviderAdapter({
     authMode: "none",
