@@ -1,5 +1,3 @@
-
-
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -10,6 +8,7 @@ from app.database import Base, engine
 from app import models
 from app.routers.auth import router as auth_router
 from app.routers.engine import router as engine_router
+from app.routers.projects import router as projects_router
 
 
 @asynccontextmanager
@@ -36,9 +35,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.include_router(auth_router)
 app.include_router(engine_router)
+app.include_router(projects_router)
 
 
 @app.get("/")
