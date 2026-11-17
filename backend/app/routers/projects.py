@@ -2,6 +2,7 @@ from pathlib import PurePosixPath
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from httpx import HTTPError
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -110,6 +111,11 @@ async def generate_project(
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except HTTPError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="Le fournisseur IA est momentanément indisponible.",
+        ) from exc
 
     project = Project(owner_id=current_user.id, **clean, status="draft_generated")
     db.add(project)
