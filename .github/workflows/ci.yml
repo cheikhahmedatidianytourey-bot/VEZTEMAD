@@ -16,9 +16,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: npm install --no-audit --no-fund
       - name: Check JavaScript syntax
         run: npm run check
-      - name: Run API tests
+      - name: Run Node API tests
         run: npm test
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Run Python backend tests
+        run: python -m unittest discover -s backend/tests -v
